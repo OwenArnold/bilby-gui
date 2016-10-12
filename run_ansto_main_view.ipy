@@ -5,6 +5,6 @@ try:
 except:
     print ('ui files not built')
 
-from AnstoMainView import AnstoMainView
+from views.AnstoMainView import AnstoMainView
 main_view = AnstoMainView()
 main_view.show()
