@@ -20,8 +20,9 @@ env:
   - PYTHONPATH=$PYTHONPATH:/opt/mantidnightly/bin
 
 script:
-  # Disable flake for now
-  # - flake8 --version && flake8
+  # Run flake on the repo
+  - flake8 --version && flake8
+  # Build the UI files and run the nosetests
   - mkdir $HOME/.mantid && echo -e "UpdateInstrumentDefinitions.OnStartup=0\nCheckMantidVersion.OnStartup=0\n" > $HOME/.mantid/Mantid.user.properties &&
     python build_all_ui_files.py &&
     nosetests -v --with-coverage --cover-min-percentage=85

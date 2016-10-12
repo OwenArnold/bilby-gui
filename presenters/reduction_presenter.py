@@ -4,10 +4,12 @@ from presenters.presenter import Presenter
 class ReductionPresenter(Presenter):
     def __init__(self):
         super(ReductionPresenter, self).__init__()
-        self.view = None
+        self._view = None
 
+    @property
     def view(self):
-        return self.view
+        return self._view
 
+    @view.setter
     def view(self, val):
         pass
