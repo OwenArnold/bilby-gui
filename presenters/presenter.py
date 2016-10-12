@@ -14,5 +14,5 @@ class Presenter(object):
         pass
 
     def check_view(self, val):
-        if not isinstance(val, View):
+        if not isinstance(val, type):
             raise TypeError("Presenter: The provided view object is not of type View but of type {0}".format(type(val)))

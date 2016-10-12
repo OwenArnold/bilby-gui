@@ -10,4 +10,4 @@ class ReductionPresenter(Presenter):
         return self.view
 
     def view(self, val):
-        #
+        pass
