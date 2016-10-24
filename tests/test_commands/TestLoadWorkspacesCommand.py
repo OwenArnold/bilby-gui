@@ -2,7 +2,7 @@ import unittest
 import mock
 from mock import MagicMock, PropertyMock, call
 
-from Commands.LoadWorkspacesCommand import LoadWorkspacesCommand
+from framework.LoadWorkspacesCommand import LoadWorkspacesCommand
 from models.WorkspaceModel import WorkspaceModel
 from models.WorkspaceNameModel import WorkspaceNameModel
 from mantid.api import IEventWorkspace
@@ -99,7 +99,7 @@ class TestLoadWorkspacesCommand(unittest.TestCase):
         calls = [call(), call(mock_workspace)]
         self.assertTrue(transmission_empty_cell_file_name_property.has_calls(calls))
 
-    def test_that_invalid_state_raises(self):
+    def test_that_invalid_state_cannot_execute(self):
         # Arrange
         workspace_model = mock.create_autospec(WorkspaceModel)
         workspace_name_model = mock.create_autospec(WorkspaceNameModel)

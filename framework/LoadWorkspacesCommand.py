@@ -1,5 +1,6 @@
 import os
-from Commands.ICommand import ICommand
+from framework.ICommand import ICommand
+from framework.AnstoTypes import InputDataType
 from models.WorkspaceModel import WorkspaceModel
 from models.WorkspaceNameModel import WorkspaceNameModel
 from mantid.simpleapi import Load
@@ -9,15 +10,6 @@ from mantid.api import AnalysisDataService
 # ----------------------------------------------------------------------------------------------------------------------
 # Free functions
 # ----------------------------------------------------------------------------------------------------------------------
-class InputDataType(object):
-    class Scattering(object):
-        pass
-
-    class ScatteringCellEmpty(object):
-        pass
-
-    class TransmissionCellEmpty(object):
-        pass
 
 
 def get_extension(data_type):

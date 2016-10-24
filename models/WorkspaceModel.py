@@ -9,7 +9,8 @@ class WorkspaceModel(object):
         self._scattering_empty_cell = None
         self._transmission_empty_cell = None
 
-    def _validate_workspace(self, workspace):
+    @staticmethod
+    def _validate_workspace(workspace):
         if not isinstance(workspace, IEventWorkspace):
             raise ValueError("WorkspaceModel: The specified workspace is not an EventWorkspace.")
 
@@ -19,7 +20,7 @@ class WorkspaceModel(object):
 
     @scattering_sample.setter
     def scattering_sample(self, value):
-        self._validate_workspace(value)
+        WorkspaceModel._validate_workspace(value)
         self._scattering_sample = value
 
     @property
@@ -28,7 +29,7 @@ class WorkspaceModel(object):
 
     @scattering_empty_cell.setter
     def scattering_empty_cell(self, value):
-        self._validate_workspace(value)
+        WorkspaceModel._validate_workspace(value)
         self._scattering_empty_cell = value
 
     @property
@@ -37,5 +38,5 @@ class WorkspaceModel(object):
 
     @transmission_empty_cell.setter
     def transmission_empty_cell(self, value):
-        self._validate_workspace(value)
+        WorkspaceModel._validate_workspace(value)
         self._transmission_empty_cell = value
