@@ -1,5 +1,5 @@
 import os
-from Commands.ICommand import ICommand
+from framework.ICommand import ICommand
 from models.WorkspaceModel import WorkspaceModel
 from models.WorkspaceNameModel import WorkspaceNameModel
 from mantid.simpleapi import Load

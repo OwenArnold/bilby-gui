@@ -2,7 +2,7 @@ import unittest
 import mock
 from mock import MagicMock, PropertyMock, call
 
-from Commands.LoadWorkspacesCommand import LoadWorkspacesCommand
+from framework.LoadWorkspacesCommand import LoadWorkspacesCommand
 from models.WorkspaceModel import WorkspaceModel
 from models.WorkspaceNameModel import WorkspaceNameModel
 from mantid.api import IEventWorkspace
