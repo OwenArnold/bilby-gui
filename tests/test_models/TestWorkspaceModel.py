@@ -3,7 +3,7 @@ import mock
 
 from nose.tools import raises
 from models.WorkspaceModel import WorkspaceModel
-from mantid.simpleapi import CreateSampleWorkspace, DeleteWorkspace
+from mantid.api import IEventWorkspace
 
 
 class TestWorkspaceModel(unittest.TestCase):
@@ -11,9 +11,13 @@ class TestWorkspaceModel(unittest.TestCase):
         self.model = WorkspaceModel()
 
     def test_setting_valid_workspaces(self):
-        sample_event_workspace = CreateSampleWorkspace(WorkspaceType="Event")
-        self.model.scattering_sample = sample_event_workspace
-        DeleteWorkspace(sample_event_workspace)
+        sample_event_workspace = mock.create_autospec(IEventWorkspace)
+        try:
+            self.model.scattering_sample = sample_event_workspace
+            has_raised = False
+        except ValueError:
+            has_raised = True
+        self.assertFalse(has_raised)
 
     @raises(ValueError)
     def test_setting_invalid_scattering_sample(self):

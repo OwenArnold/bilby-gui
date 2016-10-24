@@ -1,6 +1,7 @@
 import os
 from Commands.ICommand import ICommand
 from models.WorkspaceModel import WorkspaceModel
+from models.WorkspaceNameModel import WorkspaceNameModel
 from mantid.simpleapi import Load
 from mantid.api import AnalysisDataService
 
@@ -41,7 +42,7 @@ def create_output_workspace_name(file_path, data_type):
     :param file_path: the full path of the file to load
     :param data_type: describes the usage of the workspace
     """
-    base_name = os.path.basename(file_path)
+    base_name = os.path.splitext(os.path.basename(file_path))[0]
     extension = get_extension(data_type)
     return base_name + extension
 
@@ -50,50 +51,49 @@ def create_output_workspace_name(file_path, data_type):
 # LoadWorkspaceCommand
 # ----------------------------------------------------------------------------------------------------------------------
 class LoadWorkspacesCommand(ICommand):
-    def __init__(self, workspace_model):
+    def __init__(self, workspace_model, workspace_name_model):
         super(LoadWorkspacesCommand, self).__init__()
         if not isinstance(workspace_model, WorkspaceModel):
             raise ValueError("LoadWorkspacesCommand: Expected a workspace model of type WorkspaceModel but "
                              "instead got type {0}".format(type(workspace_model)))
+        if not isinstance(workspace_name_model, WorkspaceNameModel):
+            raise ValueError("LoadWorkspacesCommand: Expected a workspace name model of type WorkspaceNameModel but "
+                             "instead got type {0}".format(type(workspace_model)))
         self._workspace_model = workspace_model
+        self._workspace_name_model = workspace_name_model
 
-    def can_execute(self, model):
+    def can_execute(self):
         is_valid = True
 
         # We need to ensure that the sample scatter input exists
-        scattering_sample = model.scattering_sample
-        if scattering_sample == "":
+        scattering_sample_name = self._workspace_name_model.scattering_sample
+        if scattering_sample_name == "":
             is_valid = False
 
         return is_valid
 
-    def execute(self, model):
+    def execute(self):
         # Check that can execute the file
-        if not self.can_execute(model):
+        if not self.can_execute():
             raise RuntimeError("LoadWorkspacesCommand: The command cannot execute. The model does not appear to be"
                                " in a valid state.")
         # ------------------------------
         # Load the sample scatter entry
         # ------------------------------
-        scattering_sample_file_path = model.scattering_sample
+        scattering_sample_file_path = self._workspace_name_model.scattering_sample
+        self._set_workspace_on_model(scattering_sample_file_path, InputDataType.Scattering)
 
         # ------------------------------------
         # Load the scattering empty cell entry
         # ------------------------------------
-        scattering_empty_cell_file_path = model.scattering_empty_cell
-        scattering_empty_cell_workspace_name = create_output_workspace_name(scattering_sample_file_path,
-                                                                            InputDataType.ScatteringCellEmpty)
-        scattering_empty_cell_workspace = self._load_workspace(scattering_empty_cell_file_path,
-                                                               scattering_empty_cell_workspace_name)
+        scattering_empty_cell_file_path = self._workspace_name_model.scattering_empty_cell
+        self._set_workspace_on_model(scattering_empty_cell_file_path, InputDataType.ScatteringCellEmpty)
 
         # --------------------------------------
         # Load the transmission empty cell entry
         # --------------------------------------
-        transmission_empty_cell_file_path = model.scattering_empty_cell
-        transmission_empty_cell_workspace_name = create_output_workspace_name(transmission_empty_cell_file_path,
-                                                                              InputDataType.TransmissionCellEmpty)
-        transmission_empty_cell_workspace = self._load_workspace(transmission_empty_cell_file_path,
-                                                                 transmission_empty_cell_workspace_name)
+        transmission_empty_cell_file_path = self._workspace_name_model.transmission_empty_cell
+        self._set_workspace_on_model(transmission_empty_cell_file_path, InputDataType.TransmissionCellEmpty)
 
     def _set_workspace_on_model(self, file_name, data_type):
         """
@@ -151,7 +151,7 @@ class LoadWorkspacesCommand(ICommand):
 
     def _add_workspace_to_workspace_model(self, file_name, workspace_name, data_type):
         workspace = self._load_workspace(file_name, workspace_name)
-        self._set_workspace_on_model(workspace, data_type)
+        self._set_workspace_model_entry(workspace, data_type)
 
     @staticmethod
     def _load_workspace(file_name, workspace_name):

@@ -1,4 +1,3 @@
-import os
 import abc
 from mantid.api import IEventWorkspace
 
