@@ -21,6 +21,13 @@
     <widget class="QLineEdit" name="edt_sample2"/>
    </item>
    <item>
+    <widget class="QPushButton" name="btn_clear_workspaces">
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="btn_load_workspaces">
      <property name="text">
       <string>Load</string>

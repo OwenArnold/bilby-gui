@@ -2,6 +2,7 @@ from PyQt4 import QtGui
 
 from WorkspaceView_ui import Ui_WorkspaceView
 
+from framework.CommandBinding import CommandBinding
 from framework.TextBinding import TextBinding
 from models.WorkspaceModel import WorkspaceModel
 from view_models.WorkspaceViewModel import WorkspaceViewModel
@@ -23,12 +24,18 @@ class WorkspaceView(QtGui.QWidget):
         self.ui.setupUi(self)
 
         self.bindings = []
-        self.bindings.append(TextBinding(self.vm, 'scattering_sample', self.ui.edt_sample))
-        self.bindings.append(TextBinding(self.vm, 'scattering_sample', self.ui.edt_sample2))
+        # properties
+        self.bindings.append(TextBinding(self.vm.scattering_sample_property, self.ui.edt_sample))
+        self.bindings.append(TextBinding(self.vm.scattering_sample_property, self.ui.edt_sample2))
+        # commands
+        self.bindings.append(CommandBinding(self.vm.load_scattering_sample_command, self.ui.btn_load_workspaces))
+        self.bindings.append(CommandBinding(self.vm.clear_scattering_sample_command, self.ui.btn_clear_workspaces))
 
     def destroy(self, destroy_window=True, destroy_sub_windows=True):
         for binding in self.bindings:
             binding.destroy()
         self.bindings[:] = []
+
+        self.vm.destroy()
 
         super(WorkspaceView, self).destroy(destroy_window, destroy_sub_windows)

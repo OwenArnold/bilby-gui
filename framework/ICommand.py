@@ -5,9 +5,9 @@ class ICommand(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def can_execute(self, model):
+    def can_execute(self):
         pass
 
     @abc.abstractmethod
-    def execute(self, model):
+    def execute(self):
         pass
