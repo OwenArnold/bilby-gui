@@ -18,6 +18,10 @@ class WorkspaceNameModel(object):
         def on_transmission_empty_cell_changed(self, model, value):
             pass
 
+        @abc.abstractmethod
+        def on_debug_mode_changed(self, model, value):
+            pass
+
     def __init__(self):
         super(WorkspaceNameModel, self).__init__()
 
@@ -26,8 +30,8 @@ class WorkspaceNameModel(object):
         self._scattering_sample = ""
         self._scattering_empty_cell = ""
         self._transmission_empty_cell = ""
-        #self._blocked_beam = None
-        #self._direct_beam = None
+
+        self._debug_mode = False
 
     def add_listener(self, listener):
         if not isinstance(listener, WorkspaceNameModel.IListener):
@@ -81,6 +85,19 @@ class WorkspaceNameModel(object):
     @transmission_empty_cell.setter
     def transmission_empty_cell(self, value):
         WorkspaceNameModel._validate_filename(value)
-        if value != self._transmission_empty_cell:
+        if self._transmission_empty_cell != value:
             self._transmission_empty_cell = value
             self._call_listeners(lambda listener: listener.on_transmission_empty_cell_changed(self, value))
+
+    @property
+    def debug_mode(self):
+        return self._debug_mode
+
+    @debug_mode.setter
+    def debug_mode(self, value):
+        if not isinstance(value, bool):
+            raise ValueError("WorkspaceModel: the specified value \"{0}\" is not a boolean.".format(value))
+
+        if self._debug_mode != value:
+            self._debug_mode = value
+            self._call_listeners(lambda listener: listener.on_debug_mode_changed(self, value))
