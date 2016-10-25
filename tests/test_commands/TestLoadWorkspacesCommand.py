@@ -13,7 +13,7 @@ class TestLoadWorkspacesCommand(unittest.TestCase):
         # Arrange
         run_name = "BBY000123"
         expected_workspace_name = run_name + "_sans"
-        file_name = "C:\\path11\\path2\\" + run_name + ".nxs"
+        file_name = "C:/path11/path2/" + run_name + ".nxs"
 
         workspace_model = mock.create_autospec(WorkspaceModel)
         workspace_name_model = mock.create_autospec(WorkspaceNameModel)
@@ -57,7 +57,7 @@ class TestLoadWorkspacesCommand(unittest.TestCase):
     def test_file_is_loaded_if_workspace_does_not_already_exist_in_model(self):
         # Arrange
         run_name = "BBY000123"
-        file_name = "C:\\path11\\path2\\" + run_name + ".nxs"
+        file_name = "C:/path11/path2/" + run_name + ".nxs"
 
         workspace_name_model = mock.create_autospec(WorkspaceNameModel)
         scattering_sample_file_name_property = PropertyMock(return_value=file_name)
